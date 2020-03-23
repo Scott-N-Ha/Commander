@@ -1,7 +1,13 @@
 import React from 'react';
 
-const App = props => (
-  <div id="app" className="app">
-    Main App Setup
-  </div>
-)
+import Test from './game/test_game.jsx';
+
+const App = props => {
+  return (
+    <div id="app">
+      Main App Setup
+      <Test />
+    </div>
+)};
+
+export default App;
