@@ -1,18 +1,19 @@
-import React from 'react';
-import ReactDom from 'react-dom';
+import GameView from '../lib/game_view.js';
+import Game from '../lib/game.js';
 
-import configureStore from './store/store.js';
-import Root from './components/root.jsx';
+const defaultSettings = {
+  height: 500,
+  width: 500,
+  backgroundColor: "#101010",
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-  let preloadedState = {};
+  const game = new Game(defaultSettings);
 
-  const store = configureStore(preloadedState);
-  // testing
-  window.store = store;
-  // testing
+  const canvas = document.getElementById('canvas');
+  canvas.width = game.settings.width;
+  canvas.height = game.settings.height;
 
-  const root = document.getElementById('root');
-  ReactDom.render(<Root store={store} />
-  , root);
+  const context = canvas.getContext('2d');
+  new GameView(game, context).start();
 });
