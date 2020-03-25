@@ -172,18 +172,28 @@ function newGame() {
     game.bases.forEach(base => {
       if (y > base.y && y < base.y + base.width && x > base.x && x < base.x + base.width) {
         if (!!game.prevClick) {
-          game.prevClick.selected = false;
           base.selected = false;
 
-          if (game.prevClick === base) {} else {
-            game.swarm(game.prevClick, base);
-          }
+          game.prevClick.forEach(b => {
+            b.selected = false;
+            if (b === base) {
+              // Do nothing if same base
+            } else {
+              game.swarm(b, base);
+            }
+          })
+
+          // if (game.prevClick === base) {
+          //   // Do nothing if same base clicked
+          // } else {
+          //   game.swarm(game.prevClick, base);
+          // }
 
           game.prevClick = undefined;
         } else {
           if (base.player.humanPlayer) {
             base.selected = true;
-            game.prevClick = base;
+            game.prevClick = [base];
           } else {
             // Nothing happens for now
           }
