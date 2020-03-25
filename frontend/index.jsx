@@ -3,14 +3,40 @@ import Game from '../lib/game.js';
 import Util from '../lib/util.js';
 import Player from '../lib/player.js';
 
-const defaultSettings = {
+const smallSettings = {
   height: 500,
   width: 500,
   backgroundColor: "#101010",
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const game = new Game(defaultSettings);
+const mediumSettings = {
+  height: 1000,
+  width: 1000,
+  backgroundColor: "#101010",
+}
+
+const largeSettings = {
+  height: 1080,
+  width: 1920,
+  backgroundColor: "#101010",
+}
+
+function newGame () {
+  let selectedSettings;
+
+  switch (document.getElementById('game-setting').value) {
+    case "small":
+      selectedSettings = smallSettings;
+      break;
+    case "large":
+      selectedSettings = largeSettings;
+      break;
+    default:
+      selectedSettings = mediumSettings;
+      break;
+  }
+
+  const game = new Game(selectedSettings);
 
   const canvas = document.getElementById('canvas');
   canvas.width = game.settings.width;
@@ -73,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     playerName: "Player 2",
     humanPlayer: false,
     color: '#EB7261',
-    origin: [400,400],
+    origin: [selectedSettings.width-100,selectedSettings.height-100],
     space: 50,
   })
 
@@ -92,4 +118,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // });
 
   new GameView(game, context).start();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const newGameButton = document.getElementById('new-game');
+
+  newGameButton.addEventListener('click', event => {
+    event.target.textContent = "Restart Game"
+    newGame();
+  })
 });
