@@ -26,7 +26,50 @@ const playerColors = [
   '#EB7261',
 ]
 
+let gameView;
+
+function locationPosition(height, width, placement) {
+  let leftBound = 5, upperBound = 5, xPos = 5, yPos = 5;
+  const spawnSpace = 69;
+
+  switch (placement) {
+    case 0:
+      leftBound = 5;
+      upperBound = 5;
+      break;
+
+    case 1:
+      leftBound = width - Math.floor(1.4 * spawnSpace);
+      upperBound = 5
+      break;
+
+    case 2:
+      leftBound = width - Math.floor(1.4 * spawnSpace);
+      upperBound = height - Math.floor(1.4 * spawnSpace);
+      break;
+
+    case 3:
+      leftBound = 5;
+      upperBound = height - Math.floor(1.4 * spawnSpace);
+      break;
+  
+    default:
+      console.log(height, width, placement, "BROKE");
+      break;
+  }
+
+  xPos = Util.getRandomArbitrary(leftBound, leftBound + spawnSpace/4);
+  yPos = Util.getRandomArbitrary(upperBound, upperBound + spawnSpace/4);
+  const firstBase = [xPos, yPos];
+
+  
+
+  return [xPos, yPos];
+}
+
 function newGame () {
+  if (gameView) gameView.game.gameOver = true;
+
   let selectedSettings;
 
   switch (document.getElementById('game-setting').value) {
@@ -39,6 +82,17 @@ function newGame () {
     default:
       selectedSettings = mediumSettings;
       break;
+  }
+
+  let numPlayers = document.getElementById('game-players').value;
+
+  const startingLocationForPlayers = [];
+  while (numPlayers > 0) {
+    let randomLocation = Util.getRandomArbitrary(0,4);
+    if (!startingLocationForPlayers.includes(randomLocation)) {
+      startingLocationForPlayers.push(randomLocation);
+      numPlayers -= 1;
+    }
   }
 
   const game = new Game(selectedSettings);
@@ -92,25 +146,25 @@ function newGame () {
     }
   });
 
+  startingLocationForPlayers.forEach((loc, index) => {
+    game.addPlayer({
+      playerName: `Player ${index + 1}`,
+      humanPlayer: index === 0,
+      color: playerColors[index],
+      origin: locationPosition(game.settings.height, game.settings.width, loc),
+    });
+  });
 
 
-  game.addPlayer({
-    playerName: "Player 1",
-    humanPlayer: true,
-    color: '#91EB8F',
-    origin: [0,0],
-    space: 50,
-  })
+  // game.addPlayer({
+  //   playerName: "Player 2",
+  //   humanPlayer: false,
+  //   color: '#EB7261',
+  //   origin: [selectedSettings.width-100,selectedSettings.height-100],
+  //   space: 50,
+  // })
 
-  game.addPlayer({
-    playerName: "Player 2",
-    humanPlayer: false,
-    color: '#EB7261',
-    origin: [selectedSettings.width-100,selectedSettings.height-100],
-    space: 50,
-  })
-
-  new GameView(game, context).start();
+  gameView = new GameView(game, context).start();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
