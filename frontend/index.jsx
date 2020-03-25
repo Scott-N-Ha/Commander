@@ -1,5 +1,6 @@
 import GameView from '../lib/game_view.js';
 import Game from '../lib/game.js';
+import Util from '../lib/util.js';
 
 const defaultSettings = {
   height: 500,
@@ -14,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.width = game.settings.width;
   canvas.height = game.settings.height;
 
+  const context = canvas.getContext('2d');
+
   canvas.addEventListener('click', event => {
     const x = event.pageX - canvas.offsetLeft;
     const y = event.pageY - canvas.offsetTop;
@@ -24,7 +27,21 @@ document.addEventListener("DOMContentLoaded", () => {
       if (y > base.y && y < base.y + base.width && x > base.x && x < base.x + base.width) {
         console.log('Clicked a Base!', base);
         base.selected = true;
-        game.prevClick = true;
+
+        if ( !!game.prevClick) {
+          game.prevClick.selected = false;
+          base.selected = false;
+          
+          if (game.prevClick === base) {
+            console.log("Same base clicked")
+          } else {
+            console.log('Two bases connected', [game.prevClick.x, game.prevClick.y], [base.x, base.y]);
+          }
+
+          game.prevClick = undefined;
+        } else {
+          game.prevClick = base;
+        }
 
         clickedBase = true;
       } else {
@@ -52,6 +69,5 @@ document.addEventListener("DOMContentLoaded", () => {
     growthRate: 0.1,
   });
 
-  const context = canvas.getContext('2d');
   new GameView(game, context).start();
 });
