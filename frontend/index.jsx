@@ -178,6 +178,7 @@ function newGame() {
             b.selected = false;
             if (b === base) {
               // Do nothing if same base
+              base.selected = false;
             } else {
               game.swarm(b, base);
             }
