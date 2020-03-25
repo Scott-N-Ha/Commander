@@ -1,9 +1,48 @@
-#game-window {
-  display:flex;
-
-}
-
-.player-stats {
+body {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#title {
+  font-size: 48px;
+  text-align: center;
+}
+
+#game-window {
+  display:flex;
+}
+
+#player-stats {
+  /* margin-left: 20px; */
+  display: flex;
+  
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 20px;
+  /* width: 25%; */
+  margin: 20px;
+}
+
+.player {
+  margin: 2px;
+  border-bottom: 1px solid lightgray;
+}
+
+.player * {
+  font-size: 12px;
+  margin-top: 1px;
+}
+
+.player-name {
+  text-align: center;
+}
+
+#instructions {
+  width: 60%;
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 20px;
+  margin: 20px;
 }

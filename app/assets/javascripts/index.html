@@ -5,31 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="../../../lib/keymaster.js" defer></script>
   <script src="./bundle.js" defer></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../stylesheets/reset.css">
   <link rel="stylesheet" href="../stylesheets/index.css">
   <title>Commander</title>
 </head>
 <body>
-  <select id="game-setting">
-    <option value="small">Small</option>
-    <option value="medium">Medium</option>
-    <option value="large">Large</option>
-  </select>
-  <select id="game-players">
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5" disabled>5</option>
-    <option value="6" disabled>6</option>
-  </select>
-  <button id="new-game">New Game</button>
-  <button id="grid-toggle">Toggle Grid</button>
-  <br>
+  <h1 id="title">Commander</h1>
+  <div id="game-settings">
+    <select id="game-setting">
+      <option value="small">Small</option>
+      <option value="medium">Medium</option>
+      <option value="large">Large</option>
+    </select>
+    <select id="game-players">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5" disabled>5</option>
+      <option value="6" disabled>6</option>
+    </select>
+    <button id="new-game">New Game</button>
+    <button id="grid-toggle">Toggle Grid</button>
+  </div>
+  <div id="player-stats">
+
+  </div>
   <div id="game-window">
     <canvas id="canvas">No Canvas Loaded</canvas>
-    <div class="player-stats">
-      
-    </div>
+    
   </div>
   <div id="instructions">
     You are the commander of a space fleet and your goal is to conquer every other nation out there. However, these nations have the same goal as you! Fight, survive, and conquer!
