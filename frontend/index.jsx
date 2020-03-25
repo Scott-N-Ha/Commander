@@ -21,6 +21,11 @@ const largeSettings = {
   backgroundColor: "#101010",
 }
 
+const playerColors = [
+  '#91EB8F',
+  '#EB7261',
+]
+
 function newGame () {
   let selectedSettings;
 
@@ -87,6 +92,8 @@ function newGame () {
     }
   });
 
+
+
   game.addPlayer({
     playerName: "Player 1",
     humanPlayer: true,
@@ -102,20 +109,6 @@ function newGame () {
     origin: [selectedSettings.width-100,selectedSettings.height-100],
     space: 50,
   })
-
-  // game.addBase({
-  //   unitCount: 50,
-  //   color: '#91EB8F',
-  //   position: [100,100],
-  //   growthRate: 0.1,
-  // });
-
-  // game.addBase({
-  //   unitCount: 50,
-  //   color: '#EB7261',
-  //   position: [400,400],
-  //   growthRate: 0.1,
-  // });
 
   new GameView(game, context).start();
 }
