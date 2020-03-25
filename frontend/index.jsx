@@ -144,6 +144,7 @@ function newGame () {
   }
 
   const game = new Game(selectedSettings);
+  game.addStars(Util.getRandomArbitrary(69, 420));
 
   const canvas = document.getElementById('canvas');
   canvas.width = game.settings.width;
