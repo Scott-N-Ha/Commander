@@ -32,27 +32,68 @@ let gameView;
 
 function locationPosition(height, width, placement) {
   let leftBound = 5, upperBound = 5, xPos = 5, yPos = 5;
+  let leftBound2 = 5, upperBound2 = 5, xPos2 = 5, yPos2 = 5;
   const spawnSpace = 69;
+
+  const randomDir = Util.getRandomArbitrary(0,2);
 
   switch (placement) {
     case 0:
+      // First Base
       leftBound = 5;
       upperBound = 5;
+
+      // Second Base
+      if (randomDir === 0) {
+        leftBound2 = leftBound;
+        upperBound2 = upperBound + Math.floor(spawnSpace * 1.1);
+      } else {
+        leftBound2 = leftBound + Math.floor(spawnSpace * 1.1);
+        upperBound2 = upperBound;
+      }
+
       break;
 
     case 1:
       leftBound = width - Math.floor(1.4 * spawnSpace);
       upperBound = 5
+
+      if (randomDir === 0) {
+        leftBound2 = leftBound - Math.floor(1.1 * spawnSpace);
+        upperBound2 = upperBound;
+      } else {
+        leftBound2 = leftBound;
+        upperBound2 = upperBound + Math.floor(1.1 * spawnSpace); 
+      }
+
       break;
 
     case 2:
       leftBound = width - Math.floor(1.4 * spawnSpace);
       upperBound = height - Math.floor(1.4 * spawnSpace);
+
+      if (randomDir === 0) {
+        leftBound2 = leftBound - Math.floor(1.1 * spawnSpace);
+        upperBound2 = upperBound;
+      } else {
+        leftBound2 = leftBound;
+        upperBound2 = upperBound - Math.floor(1.1 * spawnSpace); 
+      }
+
       break;
 
     case 3:
       leftBound = 5;
       upperBound = height - Math.floor(1.4 * spawnSpace);
+
+      if (randomDir === 0) {
+        leftBound2 = leftBound + Math.floor(1.1 * spawnSpace);
+        upperBound2 = upperBound;
+      } else {
+        leftBound2 = leftBound;
+        upperBound2 = upperBound - Math.floor(1.1 * spawnSpace); 
+      }
+
       break;
   
     default:
@@ -64,9 +105,14 @@ function locationPosition(height, width, placement) {
   yPos = Util.getRandomArbitrary(upperBound, upperBound + spawnSpace/4);
   const firstBase = [xPos, yPos];
 
+  xPos2 = Util.getRandomArbitrary(leftBound2, leftBound2 + spawnSpace/4);
+  yPos2 = Util.getRandomArbitrary(upperBound2, upperBound2 + spawnSpace/4);
+  const secondBase = [xPos2, yPos2];
 
-
-  return [xPos, yPos];
+  return {
+    first: firstBase,
+    second: secondBase,
+  };
 }
 
 function newGame () {
