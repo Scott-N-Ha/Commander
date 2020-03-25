@@ -23,7 +23,9 @@ const largeSettings = {
 
 const playerColors = [
   '#91EB8F',
-  '#EB7261',
+  '#D66342',
+  '#8ACAF6',
+  '#AB77D4',
 ]
 
 let gameView;
@@ -62,7 +64,7 @@ function locationPosition(height, width, placement) {
   yPos = Util.getRandomArbitrary(upperBound, upperBound + spawnSpace/4);
   const firstBase = [xPos, yPos];
 
-  
+
 
   return [xPos, yPos];
 }
