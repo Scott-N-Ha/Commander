@@ -1,6 +1,7 @@
 import GameView from '../lib/game_view.js';
 import Game from '../lib/game.js';
 import Util from '../lib/util.js';
+import Player from '../lib/player.js';
 
 const defaultSettings = {
   height: 500,
@@ -26,23 +27,27 @@ document.addEventListener("DOMContentLoaded", () => {
     game.bases.forEach(base => {
       if (y > base.y && y < base.y + base.width && x > base.x && x < base.x + base.width) {
         console.log('Clicked a Base!', base);
-        base.selected = true;
-
-        if ( !!game.prevClick) {
+        
+        if ( !!game.prevClick ) {
           game.prevClick.selected = false;
           base.selected = false;
           
-          if (game.prevClick === base) {
+          if ( game.prevClick === base ) {
             console.log("Same base clicked")
           } else {
             console.log('Two bases connected', [game.prevClick.x, game.prevClick.y], [base.x, base.y]);
           }
-
+          
           game.prevClick = undefined;
         } else {
-          game.prevClick = base;
+          if ( base.player.humanPlayer ) {
+            base.selected = true;
+            game.prevClick = base;
+          } else {
+            console.log('Tried to click a non-player base');
+          }
         }
-
+        
         clickedBase = true;
       } else {
         base.selected = false;
@@ -55,19 +60,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  game.addBase({
-    unitCount: 50,
+  game.addPlayer({
+    playerName: "Player 1",
+    humanPlayer: true,
     color: '#91EB8F',
-    position: [100,100],
-    growthRate: 0.1,
-  });
+    origin: [0,0],
+    space: 50,
+  })
 
-  game.addBase({
-    unitCount: 50,
+  game.addPlayer({
+    playerName: "Player 2",
+    humanPlayer: false,
     color: '#EB7261',
-    position: [400,400],
-    growthRate: 0.1,
-  });
+    origin: [400,400],
+    space: 50,
+  })
+
+  // game.addBase({
+  //   unitCount: 50,
+  //   color: '#91EB8F',
+  //   position: [100,100],
+  //   growthRate: 0.1,
+  // });
+
+  // game.addBase({
+  //   unitCount: 50,
+  //   color: '#EB7261',
+  //   position: [400,400],
+  //   growthRate: 0.1,
+  // });
 
   new GameView(game, context).start();
 });
