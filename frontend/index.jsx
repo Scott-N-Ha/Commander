@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Same base clicked")
           } else {
             console.log('Two bases connected', [game.prevClick.x, game.prevClick.y], [base.x, base.y]);
+            game.swarm(game.prevClick, base);
           }
           
           game.prevClick = undefined;
