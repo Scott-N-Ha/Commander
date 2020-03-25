@@ -36,10 +36,16 @@ const playerColors = [
 let gameView;
 
 function locationPosition(height, width, placement) {
-  let leftBound = 5, upperBound = 5, xPos = 5, yPos = 5;
-  let leftBound2 = 5, upperBound2 = 5, xPos2 = 5, yPos2 = 5;
+  let leftBound = 5,
+    upperBound = 5,
+    xPos = 5,
+    yPos = 5;
+  let leftBound2 = 5,
+    upperBound2 = 5,
+    xPos2 = 5,
+    yPos2 = 5;
 
-  const randomDir = Util.getRandomArbitrary(0,2);
+  const randomDir = Util.getRandomArbitrary(0, 2);
 
   switch (placement) {
     case 0:
@@ -67,7 +73,7 @@ function locationPosition(height, width, placement) {
         upperBound2 = upperBound;
       } else {
         leftBound2 = leftBound;
-        upperBound2 = upperBound + Math.floor(1.6 * SPAWN_SPACE); 
+        upperBound2 = upperBound + Math.floor(1.6 * SPAWN_SPACE);
       }
 
       break;
@@ -81,7 +87,7 @@ function locationPosition(height, width, placement) {
         upperBound2 = upperBound;
       } else {
         leftBound2 = leftBound;
-        upperBound2 = upperBound - Math.floor(1.6 * SPAWN_SPACE); 
+        upperBound2 = upperBound - Math.floor(1.6 * SPAWN_SPACE);
       }
 
       break;
@@ -95,22 +101,22 @@ function locationPosition(height, width, placement) {
         upperBound2 = upperBound;
       } else {
         leftBound2 = leftBound;
-        upperBound2 = upperBound - Math.floor(1.6 * SPAWN_SPACE); 
+        upperBound2 = upperBound - Math.floor(1.6 * SPAWN_SPACE);
       }
 
       break;
-  
+
     default:
       console.log(height, width, placement, "BROKE");
       break;
   }
 
-  xPos = Util.getRandomArbitrary(leftBound, leftBound + SPAWN_SPACE/4);
-  yPos = Util.getRandomArbitrary(upperBound, upperBound + SPAWN_SPACE/4);
+  xPos = Util.getRandomArbitrary(leftBound, leftBound + SPAWN_SPACE / 4);
+  yPos = Util.getRandomArbitrary(upperBound, upperBound + SPAWN_SPACE / 4);
   const firstBase = [xPos, yPos];
 
-  xPos2 = Util.getRandomArbitrary(leftBound2, leftBound2 + SPAWN_SPACE/4);
-  yPos2 = Util.getRandomArbitrary(upperBound2, upperBound2 + SPAWN_SPACE/4);
+  xPos2 = Util.getRandomArbitrary(leftBound2, leftBound2 + SPAWN_SPACE / 4);
+  yPos2 = Util.getRandomArbitrary(upperBound2, upperBound2 + SPAWN_SPACE / 4);
   const secondBase = [xPos2, yPos2];
 
   return {
@@ -119,7 +125,7 @@ function locationPosition(height, width, placement) {
   };
 }
 
-function newGame () {
+function newGame() {
   if (gameView) gameView.game.gameOver = true;
 
   let selectedSettings;
@@ -140,7 +146,7 @@ function newGame () {
 
   const startingLocationForPlayers = [];
   while (numPlayers > 0) {
-    let randomLocation = Util.getRandomArbitrary(0,4);
+    let randomLocation = Util.getRandomArbitrary(0, 4);
     if (!startingLocationForPlayers.includes(randomLocation)) {
       startingLocationForPlayers.push(randomLocation);
       numPlayers -= 1;
@@ -165,25 +171,24 @@ function newGame () {
 
     game.bases.forEach(base => {
       if (y > base.y && y < base.y + base.width && x > base.x && x < base.x + base.width) {
-        if ( !!game.prevClick ) {
+        if (!!game.prevClick) {
           game.prevClick.selected = false;
           base.selected = false;
-          
-          if ( game.prevClick === base ) {
-          } else {
+
+          if (game.prevClick === base) {} else {
             game.swarm(game.prevClick, base);
           }
-          
+
           game.prevClick = undefined;
         } else {
-          if ( base.player.humanPlayer ) {
+          if (base.player.humanPlayer) {
             base.selected = true;
             game.prevClick = base;
           } else {
             // Nothing happens for now
           }
         }
-        
+
         clickedBase = true;
       } else {
         base.selected = false;
