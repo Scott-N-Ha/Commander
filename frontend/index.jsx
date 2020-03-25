@@ -3,22 +3,27 @@ import Game from '../lib/game.js';
 import Util from '../lib/util.js';
 import Player from '../lib/player.js';
 
+const SPAWN_SPACE = 69;
+
 const smallSettings = {
   height: 500,
   width: 500,
   backgroundColor: "#101010",
+  neutralBaseCount: 4,
 }
 
 const mediumSettings = {
   height: 1000,
   width: 1000,
   backgroundColor: "#101010",
+  neutralBaseCount: 8,
 }
 
 const largeSettings = {
   height: 1080,
   width: 1920,
   backgroundColor: "#101010",
+  neutralBaseCount: 16,
 }
 
 const playerColors = [
@@ -33,7 +38,6 @@ let gameView;
 function locationPosition(height, width, placement) {
   let leftBound = 5, upperBound = 5, xPos = 5, yPos = 5;
   let leftBound2 = 5, upperBound2 = 5, xPos2 = 5, yPos2 = 5;
-  const spawnSpace = 69;
 
   const randomDir = Util.getRandomArbitrary(0,2);
 
@@ -46,52 +50,52 @@ function locationPosition(height, width, placement) {
       // Second Base
       if (randomDir === 0) {
         leftBound2 = leftBound;
-        upperBound2 = upperBound + Math.floor(spawnSpace * 1.1);
+        upperBound2 = upperBound + Math.floor(1.6 * SPAWN_SPACE);
       } else {
-        leftBound2 = leftBound + Math.floor(spawnSpace * 1.1);
+        leftBound2 = leftBound + Math.floor(1.6 * SPAWN_SPACE);
         upperBound2 = upperBound;
       }
 
       break;
 
     case 1:
-      leftBound = width - Math.floor(1.4 * spawnSpace);
+      leftBound = width - Math.floor(1.4 * SPAWN_SPACE);
       upperBound = 5
 
       if (randomDir === 0) {
-        leftBound2 = leftBound - Math.floor(1.1 * spawnSpace);
+        leftBound2 = leftBound - Math.floor(1.6 * SPAWN_SPACE);
         upperBound2 = upperBound;
       } else {
         leftBound2 = leftBound;
-        upperBound2 = upperBound + Math.floor(1.1 * spawnSpace); 
+        upperBound2 = upperBound + Math.floor(1.6 * SPAWN_SPACE); 
       }
 
       break;
 
     case 2:
-      leftBound = width - Math.floor(1.4 * spawnSpace);
-      upperBound = height - Math.floor(1.4 * spawnSpace);
+      leftBound = width - Math.floor(1.4 * SPAWN_SPACE);
+      upperBound = height - Math.floor(1.4 * SPAWN_SPACE);
 
       if (randomDir === 0) {
-        leftBound2 = leftBound - Math.floor(1.1 * spawnSpace);
+        leftBound2 = leftBound - Math.floor(1.6 * SPAWN_SPACE);
         upperBound2 = upperBound;
       } else {
         leftBound2 = leftBound;
-        upperBound2 = upperBound - Math.floor(1.1 * spawnSpace); 
+        upperBound2 = upperBound - Math.floor(1.6 * SPAWN_SPACE); 
       }
 
       break;
 
     case 3:
       leftBound = 5;
-      upperBound = height - Math.floor(1.4 * spawnSpace);
+      upperBound = height - Math.floor(1.4 * SPAWN_SPACE);
 
       if (randomDir === 0) {
-        leftBound2 = leftBound + Math.floor(1.1 * spawnSpace);
+        leftBound2 = leftBound + Math.floor(1.6 * SPAWN_SPACE);
         upperBound2 = upperBound;
       } else {
         leftBound2 = leftBound;
-        upperBound2 = upperBound - Math.floor(1.1 * spawnSpace); 
+        upperBound2 = upperBound - Math.floor(1.6 * SPAWN_SPACE); 
       }
 
       break;
@@ -101,12 +105,12 @@ function locationPosition(height, width, placement) {
       break;
   }
 
-  xPos = Util.getRandomArbitrary(leftBound, leftBound + spawnSpace/4);
-  yPos = Util.getRandomArbitrary(upperBound, upperBound + spawnSpace/4);
+  xPos = Util.getRandomArbitrary(leftBound, leftBound + SPAWN_SPACE/4);
+  yPos = Util.getRandomArbitrary(upperBound, upperBound + SPAWN_SPACE/4);
   const firstBase = [xPos, yPos];
 
-  xPos2 = Util.getRandomArbitrary(leftBound2, leftBound2 + spawnSpace/4);
-  yPos2 = Util.getRandomArbitrary(upperBound2, upperBound2 + spawnSpace/4);
+  xPos2 = Util.getRandomArbitrary(leftBound2, leftBound2 + SPAWN_SPACE/4);
+  yPos2 = Util.getRandomArbitrary(upperBound2, upperBound2 + SPAWN_SPACE/4);
   const secondBase = [xPos2, yPos2];
 
   return {
@@ -145,6 +149,7 @@ function newGame () {
 
   const game = new Game(selectedSettings);
   game.addStars(Util.getRandomArbitrary(69, 420));
+  game.addNeutralBases(SPAWN_SPACE, game.settings.neutralBaseCount);
 
   const canvas = document.getElementById('canvas');
   canvas.width = game.settings.width;

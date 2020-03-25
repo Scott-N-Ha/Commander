@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="../../../lib/keymaster.js" defer></script>
   <script src="./bundle.js" defer></script>
+  <link rel="stylesheet" href="../stylesheets/reset.css">
+  <link rel="stylesheet" href="../stylesheets/index.css">
   <title>Commander</title>
 </head>
 <body>
@@ -22,6 +24,12 @@
   </select>
   <button id="new-game">New Game</button>
   <br>
-  <canvas id="canvas">No Canvas Loaded</canvas>
+  <div id="game-window">
+    <canvas id="canvas">No Canvas Loaded</canvas>
+    <div class="player-stats">
+      <label class="player-bases"></label>
+      <label class="player-units"></label>
+    </div>
+  </div>
 </body>
 </html>

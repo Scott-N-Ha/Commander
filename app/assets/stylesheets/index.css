@@ -1,0 +1,9 @@
+#game-window {
+  display:flex;
+
+}
+
+.player-stats {
+  display: flex;
+  flex-direction: column;
+}
