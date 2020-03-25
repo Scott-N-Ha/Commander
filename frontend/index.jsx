@@ -165,16 +165,12 @@ function newGame () {
 
     game.bases.forEach(base => {
       if (y > base.y && y < base.y + base.width && x > base.x && x < base.x + base.width) {
-        console.log('Clicked a Base!', base);
-        
         if ( !!game.prevClick ) {
           game.prevClick.selected = false;
           base.selected = false;
           
           if ( game.prevClick === base ) {
-            console.log("Same base clicked")
           } else {
-            console.log('Two bases connected', [game.prevClick.x, game.prevClick.y], [base.x, base.y]);
             game.swarm(game.prevClick, base);
           }
           
@@ -184,7 +180,7 @@ function newGame () {
             base.selected = true;
             game.prevClick = base;
           } else {
-            console.log('Tried to click a non-player base');
+            // Nothing happens for now
           }
         }
         
@@ -195,7 +191,6 @@ function newGame () {
     });
 
     if (!clickedBase) {
-      console.log('Did not click a base!');
       game.prevClick = false;
     }
   });
