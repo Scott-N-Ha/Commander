@@ -155,7 +155,7 @@ function newGame() {
 
   game = new Game(selectedSettings);
   game.addStars(Util.getRandomArbitrary(69, 420));
-  game.addNeutralBases(SPAWN_SPACE*2, game.settings.neutralBaseCount);
+  game.addNeutralBases(SPAWN_SPACE * 1.5, game.settings.neutralBaseCount);
 
   const canvas = document.getElementById('canvas');
   canvas.width = game.settings.width;
@@ -177,18 +177,11 @@ function newGame() {
           game.prevClick.forEach(b => {
             b.selected = false;
             if (b === base) {
-              // Do nothing if same base
               base.selected = false;
             } else {
               game.swarm(b, base);
             }
           })
-
-          // if (game.prevClick === base) {
-          //   // Do nothing if same base clicked
-          // } else {
-          //   game.swarm(game.prevClick, base);
-          // }
 
           game.prevClick = undefined;
         } else {
@@ -239,7 +232,8 @@ function toggleGrid() {
 document.addEventListener("DOMContentLoaded", () => {
   const newGameButton = document.getElementById('new-game');
   newGameButton.addEventListener('click', event => {
-    event.target.textContent = "Restart Game"
+    event.target.textContent = "Currently Broken Button";
+    event.target.disabled = true;
     newGame();
   })
 
