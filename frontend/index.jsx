@@ -1,7 +1,6 @@
 import GameView from '../lib/game_view.js';
 import Game from '../lib/game.js';
 import Util from '../lib/util.js';
-import Player from '../lib/player.js';
 
 const SPAWN_SPACE = 69;
 
@@ -16,7 +15,7 @@ const mediumSettings = {
   height: 1000,
   width: 1000,
   backgroundColor: "#101010",
-  neutralBaseCount: 8,
+  neutralBaseCount: 9,
 }
 
 const largeSettings = {
@@ -34,6 +33,7 @@ const playerColors = [
 ]
 
 let gameView;
+let game;
 
 function locationPosition(height, width, placement) {
   let leftBound = 5,
@@ -153,9 +153,9 @@ function newGame() {
     }
   }
 
-  const game = new Game(selectedSettings);
+  game = new Game(selectedSettings);
   game.addStars(Util.getRandomArbitrary(69, 420));
-  game.addNeutralBases(SPAWN_SPACE, game.settings.neutralBaseCount);
+  game.addNeutralBases(SPAWN_SPACE*2, game.settings.neutralBaseCount);
 
   const canvas = document.getElementById('canvas');
   canvas.width = game.settings.width;
@@ -221,11 +221,19 @@ function newGame() {
   gameView = new GameView(game, context).start();
 }
 
+function toggleGrid() {
+  if (game) game.drawGrid = !game.drawGrid;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const newGameButton = document.getElementById('new-game');
-
   newGameButton.addEventListener('click', event => {
     event.target.textContent = "Restart Game"
     newGame();
   })
+
+  const toggleGridButton = document.getElementById('grid-toggle');
+  toggleGridButton.addEventListener('click', event => {
+    toggleGrid();
+  });
 });
