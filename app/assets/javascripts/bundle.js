@@ -312,7 +312,7 @@ function newGame() {
   var muteButton = document.getElementById('mute-button');
   muteButton.addEventListener('click', function (event) {
     game.mute = !game.mute;
-    audio.mute = game.mute;
+    game.mute ? audio.pause() : audio.play();
     muteButton.innerText = game.mute ? "Unmute" : "Mute";
   });
   gameView = new _lib_game_view_js__WEBPACK_IMPORTED_MODULE_0__["default"](game, context).start();

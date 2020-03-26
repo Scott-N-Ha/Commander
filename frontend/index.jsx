@@ -240,7 +240,7 @@ function newGame() {
   const muteButton = document.getElementById('mute-button');
   muteButton.addEventListener('click', event => {
     game.mute = !game.mute;
-    audio.mute = game.mute;
+    game.mute ? audio.pause() : audio.play();
     muteButton.innerText = game.mute ? "Unmute" : "Mute";
   });
 
