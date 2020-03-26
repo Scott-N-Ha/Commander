@@ -2,6 +2,8 @@ import GameView from '../lib/game_view.js';
 import Game from '../lib/game.js';
 import Util from '../lib/util.js';
 
+let computerOnly = false;
+
 const SPAWN_SPACE = 69;
 
 const smallSettings = {
@@ -215,8 +217,8 @@ function newGame() {
   startingLocationForPlayers.forEach((loc, index) => {
     game.addPlayer({
       playerName: `Player ${index + 1}`,
-      humanPlayer: index === 0,
-      thoughtGrowth: index === 0 ? 0 : gameDifficulty[selectedDifficulty],
+      humanPlayer: !computerOnly && index === 0,
+      thoughtGrowth: !computerOnly && index === 0 ? 0 : gameDifficulty[selectedDifficulty],
       color: playerColors[index],
       origin: locationPosition(game.settings.height, game.settings.width, loc),
     });
@@ -239,9 +241,20 @@ function toggleGrid() {
 
 document.addEventListener("DOMContentLoaded", () => {
   const newGameButton = document.getElementById('new-game');
+  const computerGameButton = document.getElementById('computer-game');
+
   newGameButton.addEventListener('click', event => {
     event.target.textContent = "Currently Broken Button";
     event.target.disabled = true;
+    computerGameButton.disabled = true;
+    newGame();
+  })
+
+  computerGameButton.addEventListener('click', event => {
+    event.target.textContent = "Computers only";
+    event.target.disabled = true;
+    newGameButton.disabled = true;
+    computerOnly = true;
     newGame();
   })
 

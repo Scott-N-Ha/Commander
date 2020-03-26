@@ -3,6 +3,7 @@
   box-sizing: border-box;
   color: white;
   background-color: black;
+  border-radius: 5px;
   border: 1px solid white;
 }
 
@@ -17,29 +18,58 @@ body {
   align-items: center;
 }
 
+button {
+  padding: 5px;
+  width: 150px;
+  height: 50px;
+}
+
+button:disabled {
+  border: 1px solid darkgray;
+  color: darkgray;
+  cursor: default;
+}
+
 #title {
   font-size: 48px;
   text-align: center;
+  margin: 50px;
 }
 
-#game-window {
+#game-settings {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#game-settings * {
+  margin: 5px;
+}
+
+/* #game-window {
   display:flex;
+} */
+
+canvas {
+  border-radius: 5px;
 }
 
 #player-stats {
-  /* margin-left: 20px; */
   display: flex;
   
-  border-radius: 5px;
   border: 1px solid black;
   padding: 20px;
-  /* width: 25%; */
   margin: 20px;
 }
 
 .player {
-  margin: 2px;
-  border-bottom: 1px solid lightgray;
+  margin: 5px;
+  padding: 15px;
+  border: 1px solid lightgray;
+  display: flex;
+  flex-direction: column;
+  align-items: unset;
+  width: 200px;
 }
 
 .player * {
@@ -53,8 +83,17 @@ body {
 
 #instructions {
   width: 60%;
-  border-radius: 5px;
   border: 1px solid black;
   padding: 20px;
   margin: 20px;
+}
+
+#footer {
+  display: flex;
+}
+
+#footer * {
+  margin: 10px;
+  border: none;
+  font-size: 48px;
 }

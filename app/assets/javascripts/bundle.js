@@ -101,6 +101,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var computerOnly = false;
 var SPAWN_SPACE = 69;
 var smallSettings = {
   height: 500,
@@ -292,8 +293,8 @@ function newGame() {
   startingLocationForPlayers.forEach(function (loc, index) {
     game.addPlayer({
       playerName: "Player ".concat(index + 1),
-      humanPlayer: index === 0,
-      thoughtGrowth: index === 0 ? 0 : gameDifficulty[selectedDifficulty],
+      humanPlayer: !computerOnly && index === 0,
+      thoughtGrowth: !computerOnly && index === 0 ? 0 : gameDifficulty[selectedDifficulty],
       color: playerColors[index],
       origin: locationPosition(game.settings.height, game.settings.width, loc)
     });
@@ -314,9 +315,18 @@ function toggleGrid() {
 
 document.addEventListener("DOMContentLoaded", function () {
   var newGameButton = document.getElementById('new-game');
+  var computerGameButton = document.getElementById('computer-game');
   newGameButton.addEventListener('click', function (event) {
     event.target.textContent = "Currently Broken Button";
     event.target.disabled = true;
+    computerGameButton.disabled = true;
+    newGame();
+  });
+  computerGameButton.addEventListener('click', function (event) {
+    event.target.textContent = "Computers only";
+    event.target.disabled = true;
+    newGameButton.disabled = true;
+    computerOnly = true;
     newGame();
   });
   var toggleGridButton = document.getElementById('grid-toggle');
@@ -495,18 +505,23 @@ var Game = /*#__PURE__*/function () {
       var player = new _player_js__WEBPACK_IMPORTED_MODULE_4__["default"](settings);
       var newDiv = document.createElement('div');
       newDiv.classList.add('player');
+      newDiv.style.color = player.color;
       var newName = document.createElement('div');
       newName.classList.add('player-name');
       newName.innerHTML = player.playerName;
+      newName.style.color = player.color;
       newDiv.appendChild(newName);
       var newBase = document.createElement('div');
       newBase.classList.add('player-bases');
+      newBase.style.color = player.color;
       newDiv.appendChild(newBase);
       var newUnit = document.createElement('div');
       newUnit.classList.add('player-units');
+      newUnit.style.color = player.color;
       newDiv.appendChild(newUnit);
       var newAttack = document.createElement('div');
       newAttack.classList.add('player-attack');
+      newAttack.style.color = player.color;
       newDiv.appendChild(newAttack);
       document.getElementById('player-stats').appendChild(newDiv);
       player.playerDiv = newDiv;
@@ -658,16 +673,18 @@ var Game = /*#__PURE__*/function () {
         obj.step(delta);
       });
 
-      if (this.humanPlayer.bases.length <= 0 && !this.alerted) {
-        // this.gameOver = true;
-        alert('You Lose!');
-        this.alerted = true;
-      }
+      if (this.humanPlayer) {
+        if (this.humanPlayer.bases.length <= 0 && !this.alerted) {
+          // this.gameOver = true;
+          alert('You Lose!');
+          this.alerted = true;
+        }
 
-      if (this.players.length === 1 && !this.alerted) {
-        // this.gameOver = true;
-        alert('You Win!');
-        this.alerted = true;
+        if (this.players.length === 1 && !this.alerted) {
+          // this.gameOver = true;
+          alert('You Win!');
+          this.alerted = true;
+        }
       }
     }
   }, {
@@ -827,7 +844,7 @@ var Player = /*#__PURE__*/function () {
               break;
 
             case 3:
-              htmlText = "Attack Power: " + this.attackPower;
+              htmlText = "Power: " + this.attackPower;
               break;
 
             default:
@@ -964,7 +981,7 @@ var Star = /*#__PURE__*/function () {
 
     this.x = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRandomArbitrary(0, width);
     this.y = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRandomArbitrary(0, height);
-    this.color = "rgba(255, 255, 255, ".concat(_util_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRandomArbitrary(50, 100) / 100, ")");
+    this.color = "rgba(255, 255, 255, ".concat(_util_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRandomArbitrary(30, 100) / 100, ")");
     this.radius = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRandomArbitrary(1, 4);
   }
 
