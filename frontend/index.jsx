@@ -32,6 +32,12 @@ const playerColors = [
   '#AB77D4',
 ]
 
+const gameDifficulty = {
+  easy: .33,
+  medium: .66,
+  hard: .88,
+}
+
 let gameView;
 let game;
 
@@ -204,16 +210,17 @@ function newGame() {
     }
   });
 
+  const selectedDifficulty = document.getElementById('game-difficulty').value;
+
   startingLocationForPlayers.forEach((loc, index) => {
     game.addPlayer({
       playerName: `Player ${index + 1}`,
       humanPlayer: index === 0,
-      thoughtGrowth: index === 0 ? 0 : .69,
+      thoughtGrowth: index === 0 ? 0 : gameDifficulty[selectedDifficulty],
       color: playerColors[index],
       origin: locationPosition(game.settings.height, game.settings.width, loc),
     });
   });
-
 
   // game.addPlayer({
   //   playerName: "Player 2",

@@ -121,6 +121,11 @@ var largeSettings = {
   neutralBaseCount: 16
 };
 var playerColors = ['#91EB8F', '#D66342', '#8ACAF6', '#AB77D4'];
+var gameDifficulty = {
+  easy: .33,
+  medium: .66,
+  hard: .88
+};
 var gameView;
 var game;
 
@@ -283,11 +288,12 @@ function newGame() {
       game.prevClick = false;
     }
   });
+  var selectedDifficulty = document.getElementById('game-difficulty').value;
   startingLocationForPlayers.forEach(function (loc, index) {
     game.addPlayer({
       playerName: "Player ".concat(index + 1),
       humanPlayer: index === 0,
-      thoughtGrowth: index === 0 ? 0 : .69,
+      thoughtGrowth: index === 0 ? 0 : gameDifficulty[selectedDifficulty],
       color: playerColors[index],
       origin: locationPosition(game.settings.height, game.settings.width, loc)
     });
@@ -838,7 +844,8 @@ var Player = /*#__PURE__*/function () {
     value: function computeMoves() {
       var _this = this;
 
-      this.thoughtProgress = 0.0;
+      this.thoughtProgress = 0.0; // Hunt for Neutral Bases
+
       var neutralBases = this.game.bases.filter(function (base) {
         return base.player.type === null;
       });
@@ -852,6 +859,43 @@ var Player = /*#__PURE__*/function () {
         this.bases.forEach(function (base) {
           _this.game.swarm(base, target);
         });
+      } // Determine Current Ranking and decide to Attack or Defend
+
+
+      var bestPlayer = this.game.players.reduce(function (acc, player) {
+        return acc.attackPower > player.attackPower ? acc : player;
+      });
+      var worstPlayer = this.game.players.reduce(function (acc, player) {
+        return acc.attackPower < player.attackPower ? acc : player;
+      });
+      var weakestBase, strongestBase; // If we are the best player
+
+      if (bestPlayer === this) {
+        weakestBase = this.game.bases.reduce(function (acc, base) {
+          if (acc.player === _this) return base;
+          if (base.player === _this) return acc;
+          return acc.unitCount < base.unitCount ? acc : base;
+        });
+        this.bases.forEach(function (base) {
+          _this.game.swarm(base, weakestBase);
+        });
+      } else {
+        if (worstPlayer !== this) {// weakestBase = this.game.bases.reduce((acc, base) => {
+          //   if ( acc.player === this ) return base;
+          //   if ( base.player === this ) return acc;
+          //   return acc.player !== bestPlayer && acc.unitCount < base.unitCount ? acc : base;
+          // });
+          // strongestBase = this.bases.reduce((acc, base) => acc.unitCount > base.unitCount ? acc : base);
+          // this.game.swarm(strongestBase, weakestBase);
+        } else if (this.bases.length > 1) {
+          strongestBase = this.bases.reduce(function (acc, base) {
+            return acc.unitCount > base.unitCount ? acc : base;
+          });
+          weakestBase = this.bases.reduce(function (acc, base) {
+            return acc.unitCount < base.unitCount ? acc : base;
+          });
+          this.game.swarm(strongestBase, weakestBase);
+        }
       }
     }
   }, {
