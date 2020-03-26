@@ -380,8 +380,8 @@ var progressBarDims = {
 };
 var gameDifficulty = {
   easy: 1.0,
-  medium: 1.1,
-  hard: 1.2
+  medium: 1.05,
+  hard: 1.1
 };
 
 var Base = /*#__PURE__*/function () {
