@@ -1063,41 +1063,58 @@ var Player = /*#__PURE__*/function () {
     value: function computeMoves() {
       var _this7 = this;
 
-      this.thoughtProgress = 0.0; // Hunt for Neutral Bases
+      this.thoughtProgress = 0.0;
 
-      var neutralBases = this.game.bases.filter(function (base) {
-        return base.player.type === null;
-      });
-
-      if (neutralBases.length > 0) {
-        var target = neutralBases.reduce(function (acc, base) {
-          var accDist = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([acc.x, acc.y], [_this7.x, _this7.y]);
-          var baseDist = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([base.x, base.y], [_this7.x, _this7.y]);
-          return accDist < baseDist ? acc : base;
+      if (this.game.players.length === 1) {
+        var survivors = this.game.bases.filter(function (base) {
+          return base.player !== _this7;
         });
-        this.swarm(target);
-      }
 
-      switch (this.computerType) {
-        case 1:
-          this.aggresiveManuevers();
-          break;
+        if (survivors.length > 0) {
+          survivors.forEach(function (base) {
+            return _this7.swarm(base);
+          });
+        } // Celebration lap
+        // if(Util.getRandomArbitrary(0,10) === 7) {
+        //   this.swarm(this.bases[Util.getRandomArbitrary(0, this.bases.length)]);
+        // }
 
-        case 2:
-          this.sneakyManuevers();
-          break;
+      } else {
+        // Hunt for Neutral Bases
+        var neutralBases = this.game.bases.filter(function (base) {
+          return base.player.type === null;
+        });
 
-        case 3:
-          this.slowManuevers();
-          break;
+        if (neutralBases.length > 0) {
+          var target = neutralBases.reduce(function (acc, base) {
+            var accDist = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([acc.x, acc.y], [_this7.x, _this7.y]);
+            var baseDist = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([base.x, base.y], [_this7.x, _this7.y]);
+            return accDist < baseDist ? acc : base;
+          });
+          this.swarm(target);
+        }
 
-        case 4:
-          this.valueManuevers();
-          break;
+        switch (this.computerType) {
+          case 1:
+            this.aggresiveManuevers();
+            break;
 
-        default:
-          this.defaultManuevers();
-          break;
+          case 2:
+            this.sneakyManuevers();
+            break;
+
+          case 3:
+            this.slowManuevers();
+            break;
+
+          case 4:
+            this.valueManuevers();
+            break;
+
+          default:
+            this.defaultManuevers();
+            break;
+        }
       }
     }
   }, {

@@ -40,10 +40,33 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  flex-direction: column;
 }
 
 #game-settings * {
   margin: 5px;
+}
+
+#game-options {
+  display: flex;
+  justify-content: space-between;
+}
+
+#game-options * {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+#map-size, #num-players, #cpu-difficulty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#game-buttons {
+  display: flex;
+  align-items: center;
 }
 
 /* #game-window {

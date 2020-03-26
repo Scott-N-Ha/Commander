@@ -22,26 +22,42 @@
 <body>
   <h1 id="title">Commander</h1>
   <div id="game-settings">
-    <select id="game-setting">
-      <option value="small">Small</option>
-      <option value="medium">Medium</option>
-      <option value="large" disabled>Large</option>
-    </select>
-    <select id="game-players">
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5" disabled>5</option>
-      <option value="6" disabled>6</option>
-    </select>
-    <select id="game-difficulty">
-      <option value="easy">Easy</option>
-      <option value="medium">Medium</option>
-      <option value="hard">Hard</option>
-    </select>
-    <button id="new-game">New Game</button>
-    <button id="computer-game">AI Only Game</button>
-    <button id="mute-button">Mute</button>
+    <div id="game-options">
+      <div id="map-size">
+        Map Size
+        <br>
+        <select id="game-setting">
+          <option value="small">Small</option>
+          <option value="medium">Medium</option>
+          <option value="large" disabled>Large</option>
+        </select>
+      </div>
+      <div id="num-players">
+        # Players
+        <br>
+        <select id="game-players">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5" disabled>5</option>
+          <option value="6" disabled>6</option>
+        </select>
+      </div>
+      <div id="cpu-difficulty">
+        AI Difficulty
+        <br>
+        <select id="game-difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+    </div>
+    <div id="game-buttons">
+      <button id="new-game">New Game</button>
+      <button id="computer-game">AI Only Game</button>
+      <button id="mute-button">Mute</button>
+    </div>
   </div>
   <div id="player-stats">
   </div>
