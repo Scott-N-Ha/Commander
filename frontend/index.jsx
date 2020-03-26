@@ -2,7 +2,10 @@ import GameView from '../lib/game_view.js';
 import Game from '../lib/game.js';
 import Util from '../lib/util.js';
 
+let gameView;
+let game;
 let computerOnly = false;
+let bgMusic = true;
 
 const SPAWN_SPACE = 69;
 
@@ -40,8 +43,6 @@ const gameDifficulty = {
   hard: .88,
 }
 
-let gameView;
-let game;
 
 function locationPosition(height, width, placement) {
   let leftBound = 5,
@@ -134,10 +135,9 @@ function locationPosition(height, width, placement) {
 }
 
 function newGame() {
-  if (gameView) gameView.game.gameOver = true;
-
-  const audio = document.getElementsByTagName('audio')[0];
-  audio.play();
+  if (game) game.destroy();
+  game = undefined;
+  gameView = undefined;
 
   let selectedSettings;
 
@@ -237,13 +237,6 @@ function newGame() {
   //   space: 50,
   // })
 
-  const muteButton = document.getElementById('mute-button');
-  muteButton.addEventListener('click', event => {
-    game.mute = !game.mute;
-    game.mute ? audio.pause() : audio.play();
-    muteButton.innerText = game.mute ? "Unmute" : "Mute";
-  });
-
   gameView = new GameView(game, context).start();
 }
 
@@ -257,17 +250,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   newGameButton.addEventListener('click', event => {
     event.target.textContent = "Currently Broken Button";
-    event.target.disabled = true;
-    computerGameButton.disabled = true;
+    // event.target.disabled = true;
+    // computerGameButton.disabled = true;
     newGame();
   });
 
   computerGameButton.addEventListener('click', event => {
     event.target.textContent = "Computers only";
-    event.target.disabled = true;
-    newGameButton.disabled = true;
+    // event.target.disabled = true;
+    // newGameButton.disabled = true;
     computerOnly = true;
     newGame();
+  });
+
+  const audio = document.getElementsByTagName('audio')[0];
+  audio.play();
+
+  const muteButton = document.getElementById('mute-button');
+  muteButton.addEventListener('click', event => {
+    bgMusic = !bgMusic;
+    bgMusic ? audio.play() : audio.pause();
+    
+    if (game) game.mute = bgMusic;
+
+    muteButton.innerText = bgMusic ? "Mute" : "Unmute";
   });
 
   const toggleGridButton = document.getElementById('grid-toggle');

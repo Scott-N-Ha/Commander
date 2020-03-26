@@ -101,7 +101,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var gameView;
+var game;
 var computerOnly = false;
+var bgMusic = true;
 var SPAWN_SPACE = 69;
 var smallSettings = {
   height: 500,
@@ -127,8 +130,6 @@ var gameDifficulty = {
   medium: .66,
   hard: .88
 };
-var gameView;
-var game;
 
 function locationPosition(height, width, placement) {
   var leftBound = 5,
@@ -217,9 +218,9 @@ function locationPosition(height, width, placement) {
 }
 
 function newGame() {
-  if (gameView) gameView.game.gameOver = true;
-  var audio = document.getElementsByTagName('audio')[0];
-  audio.play();
+  if (game) game.destroy();
+  game = undefined;
+  gameView = undefined;
   var selectedSettings;
   document.getElementById('game-toggles').classList.remove('hidden');
 
@@ -309,12 +310,6 @@ function newGame() {
   //   space: 50,
   // })
 
-  var muteButton = document.getElementById('mute-button');
-  muteButton.addEventListener('click', function (event) {
-    game.mute = !game.mute;
-    game.mute ? audio.pause() : audio.play();
-    muteButton.innerText = game.mute ? "Unmute" : "Mute";
-  });
   gameView = new _lib_game_view_js__WEBPACK_IMPORTED_MODULE_0__["default"](game, context).start();
 }
 
@@ -326,17 +321,26 @@ document.addEventListener("DOMContentLoaded", function () {
   var newGameButton = document.getElementById('new-game');
   var computerGameButton = document.getElementById('computer-game');
   newGameButton.addEventListener('click', function (event) {
-    event.target.textContent = "Currently Broken Button";
-    event.target.disabled = true;
-    computerGameButton.disabled = true;
+    event.target.textContent = "Currently Broken Button"; // event.target.disabled = true;
+    // computerGameButton.disabled = true;
+
     newGame();
   });
   computerGameButton.addEventListener('click', function (event) {
-    event.target.textContent = "Computers only";
-    event.target.disabled = true;
-    newGameButton.disabled = true;
+    event.target.textContent = "Computers only"; // event.target.disabled = true;
+    // newGameButton.disabled = true;
+
     computerOnly = true;
     newGame();
+  });
+  var audio = document.getElementsByTagName('audio')[0];
+  audio.play();
+  var muteButton = document.getElementById('mute-button');
+  muteButton.addEventListener('click', function (event) {
+    bgMusic = !bgMusic;
+    bgMusic ? audio.play() : audio.pause();
+    if (game) game.mute = bgMusic;
+    muteButton.innerText = bgMusic ? "Mute" : "Unmute";
   });
   var toggleGridButton = document.getElementById('grid-toggle');
   toggleGridButton.addEventListener('click', function (event) {
@@ -705,7 +709,21 @@ var Game = /*#__PURE__*/function () {
       } else if (object instanceof _player_js__WEBPACK_IMPORTED_MODULE_4__["default"]) {
         object.playerDiv.remove();
         this.players.splice(this.players.indexOf(object), 1);
+      } else if (object instanceof _base_js__WEBPACK_IMPORTED_MODULE_2__["default"]) {
+        this.bases.splice(this.bases.indexOf(object), 1);
+      } else if (object instanceof _star_js__WEBPACK_IMPORTED_MODULE_1__["default"]) {
+        this.stars.splice(this.stars.indexOf(object), 1);
       }
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      var _this2 = this;
+
+      this.gameOver = true;
+      this.allObjects().forEach(function (obj) {
+        return _this2.remove(obj);
+      });
     }
   }]);
 
