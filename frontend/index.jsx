@@ -172,6 +172,7 @@ function newGame() {
   if (audio) {
     audio.play();
     bgMusic = true;
+    document.getElementById('mute-button').textContent = "Mute";
   }
 
   const canvas = document.getElementById('canvas');
@@ -247,16 +248,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const computerGameButton = document.getElementById('computer-game');
 
   newGameButton.addEventListener('click', event => {
-    event.target.textContent = "Borken Button :(";
-    event.target.disabled = true;
-    // computerGameButton.disabled = true;
+    event.target.textContent = "Restart Game";
+    computerOnly = false;
     newGame();
   });
   
   computerGameButton.addEventListener('click', event => {
-    newGameButton.disabled = true;
-    newGameButton.textContent = "Borken Button :(";
-    // event.target.disabled = true;
+    newGameButton.textContent = "Restart Game";
     computerOnly = true;
     newGame();
   });

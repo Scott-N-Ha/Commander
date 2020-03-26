@@ -260,6 +260,7 @@ function newGame() {
   if (audio) {
     audio.play();
     bgMusic = true;
+    document.getElementById('mute-button').textContent = "Mute";
   }
 
   var canvas = document.getElementById('canvas');
@@ -325,15 +326,12 @@ document.addEventListener("DOMContentLoaded", function () {
   var newGameButton = document.getElementById('new-game');
   var computerGameButton = document.getElementById('computer-game');
   newGameButton.addEventListener('click', function (event) {
-    event.target.textContent = "Borken Button :(";
-    event.target.disabled = true; // computerGameButton.disabled = true;
-
+    event.target.textContent = "Restart Game";
+    computerOnly = false;
     newGame();
   });
   computerGameButton.addEventListener('click', function (event) {
-    newGameButton.disabled = true;
-    newGameButton.textContent = "Borken Button :("; // event.target.disabled = true;
-
+    newGameButton.textContent = "Restart Game";
     computerOnly = true;
     newGame();
   });
