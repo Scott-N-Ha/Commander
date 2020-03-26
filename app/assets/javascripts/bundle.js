@@ -479,6 +479,13 @@ var defaultSettings = {
   width: 500,
   backgroundColor: "#808080"
 };
+var computerAITypes = {
+  0: "default",
+  1: "aggresive",
+  2: "sneaky",
+  3: "slow but steady",
+  4: "value bases"
+};
 
 var Game = /*#__PURE__*/function () {
   function Game() {
@@ -525,6 +532,11 @@ var Game = /*#__PURE__*/function () {
       newName.innerHTML = player.playerName;
       newName.style.color = player.color;
       newDiv.appendChild(newName);
+      var newType = document.createElement('div');
+      newType.classList.add('player-type');
+      newType.innerHTML = player.humanPlayer ? "Human" : computerAITypes[player.computerType];
+      newType.style.color = player.color;
+      newDiv.appendChild(newType);
       var newBase = document.createElement('div');
       newBase.classList.add('player-bases');
       newBase.style.color = player.color;
@@ -834,6 +846,13 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 
+var computerAITypes = {
+  0: "Default CPU",
+  1: "Aggressive CPU",
+  2: "Sneaky CPU",
+  3: "Defensive CPU",
+  4: "Production CPU"
+};
 
 var Player = /*#__PURE__*/function () {
   function Player(options) {
@@ -841,6 +860,7 @@ var Player = /*#__PURE__*/function () {
 
     this.playerName = options.playerName;
     this.humanPlayer = options.humanPlayer;
+    if (!options.humanPlayer) this.computerType = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRandomArbitrary(0, 5);
     this.color = options.color;
     this.bases = [];
     this.unitCount = 0;
@@ -853,25 +873,38 @@ var Player = /*#__PURE__*/function () {
     this.draw = this.draw.bind(this);
     this.fillDisplay = this.fillDisplay.bind(this);
     this.computeMoves = this.computeMoves.bind(this);
+    this.findWeakestPlayer = this.findWeakestPlayer.bind(this);
+    this.findStrongestPlayer = this.findStrongestPlayer.bind(this);
+    this.swarm = this.swarm.bind(this);
+    this.swarmWeakestBase = this.swarmWeakestBase.bind(this);
+    this.aggresiveManuevers = this.aggresiveManuevers.bind(this);
+    this.sneakyManuevers = this.sneakyManuevers.bind(this);
+    this.slowManuevers = this.slowManuevers.bind(this);
+    this.valueManuevers = this.valueManuevers.bind(this);
+    this.defaultManuevers = this.defaultManuevers.bind(this);
   }
 
   _createClass(Player, [{
     key: "fillDisplay",
     value: function fillDisplay() {
       if (this.playerDiv) {
-        for (var i = 1; i < 4; i++) {
+        for (var i = 1; i < this.playerDiv.children.length; i++) {
           var htmlText = void 0;
 
           switch (i) {
             case 1:
-              htmlText = "Bases: " + this.bases.length;
+              htmlText = this.humanPlayer ? "Human" : computerAITypes[this.computerType];
               break;
 
             case 2:
-              htmlText = "Units: " + this.unitCount;
+              htmlText = "Bases: " + this.bases.length;
               break;
 
             case 3:
+              htmlText = "Units: " + this.unitCount;
+              break;
+
+            case 4:
               htmlText = "Power: " + this.attackPower;
               break;
 
@@ -885,53 +918,122 @@ var Player = /*#__PURE__*/function () {
       }
     }
   }, {
-    key: "computeMoves",
-    value: function computeMoves() {
+    key: "swarm",
+    value: function swarm(target) {
       var _this = this;
 
-      this.thoughtProgress = 0.0; // Hunt for Neutral Bases
-
-      var neutralBases = this.game.bases.filter(function (base) {
-        return base.player.type === null;
+      this.bases.forEach(function (base) {
+        return _this.game.swarm(base, target);
       });
+    }
+  }, {
+    key: "swarmWeakestBase",
+    value: function swarmWeakestBase(player) {
+      this.swarm(player.bases.reduce(function (acc, base) {
+        return acc.unitCount < base.unitCount ? acc : base;
+      }));
+    }
+  }, {
+    key: "findWeakestPlayer",
+    value: function findWeakestPlayer() {
+      var _this2 = this;
 
-      if (neutralBases.length > 0) {
-        var target = neutralBases.reduce(function (acc, base) {
-          var accDist = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([acc.x, acc.y], [_this.x, _this.y]);
-          var baseDist = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([base.x, base.y], [_this.x, _this.y]);
-          return accDist < baseDist ? acc : base;
+      var includeSelf = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      if (includeSelf) {
+        return this.game.players.reduce(function (acc, player) {
+          return acc.attackPower < player.attackPower ? acc : player;
         });
-        this.bases.forEach(function (base) {
-          _this.game.swarm(base, target);
+      } else {
+        return this.game.players.reduce(function (acc, player) {
+          if (acc === _this2) return player;
+          if (player === _this2) return acc;
+          return acc.attackPower < player.attackPower ? acc : player;
         });
-      } // Determine Current Ranking and decide to Attack or Defend
-
-
-      var bestPlayer = this.game.players.reduce(function (acc, player) {
+      }
+    }
+  }, {
+    key: "findStrongestPlayer",
+    value: function findStrongestPlayer() {
+      return this.game.players.reduce(function (acc, player) {
         return acc.attackPower > player.attackPower ? acc : player;
       });
-      var worstPlayer = this.game.players.reduce(function (acc, player) {
-        return acc.attackPower < player.attackPower ? acc : player;
+    }
+  }, {
+    key: "aggresiveManuevers",
+    value: function aggresiveManuevers() {
+      // Find the weakest player and target their weakest base
+      this.swarmWeakestBase(this.findWeakestPlayer(false));
+    }
+  }, {
+    key: "sneakyManuevers",
+    value: function sneakyManuevers() {
+      var _this3 = this;
+
+      // Find the player with the most favorable bases
+      var mostBases = this.game.players.reduce(function (acc, player) {
+        if (acc === _this3) return player;
+        if (player === _this3) return acc;
+        if (acc.bases.length > player.bases.length) return acc;
+        if (acc.bases.length === player.bases.length && acc.unitCount < player.unitCount) return acc;
+        return player;
+      }); // Target the weakest base
+
+      this.swarmWeakestBase(mostBases);
+    }
+  }, {
+    key: "slowManuevers",
+    value: function slowManuevers() {
+      var _this4 = this;
+
+      var closetBase = this.game.bases.reduce(function (acc, base) {
+        if (acc.player === _this4) return base;
+        if (base.player === _this4) return acc;
+        return _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([_this4.x, _this4.y], [acc.x, acc.y]) < _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([_this4.x, _this4.y], [base.x, base.y]) ? acc : base;
       });
+
+      if (this.attackPower > closetBase.unitCount) {
+        this.swarm(closetBase);
+      } else {// Do nothing for now
+      }
+    }
+  }, {
+    key: "valueManuevers",
+    value: function valueManuevers() {
+      var _this5 = this;
+
+      var basesWithHighProd = this.game.bases.filter(function (base) {
+        return base.player !== _this5 && base.growthCount > 40;
+      });
+
+      if (basesWithHighProd.length > 1) {
+        var mostDesirableBase = basesWithHighProd.reduce(function (acc, base) {
+          return acc.unitCount < base.unitCount ? acc : base;
+        });
+        this.swarm(mostDesirableBase);
+      } else {
+        this.defaultManuevers();
+      }
+    }
+  }, {
+    key: "defaultManuevers",
+    value: function defaultManuevers() {
+      var _this6 = this;
+
+      // Determine Current Ranking and decide to Attack or Defend
+      var bestPlayer = this.findStrongestPlayer();
+      var worstPlayer = this.findWeakestPlayer();
       var weakestBase, strongestBase; // If we are the best player
 
       if (bestPlayer === this) {
         weakestBase = this.game.bases.reduce(function (acc, base) {
-          if (acc.player === _this) return base;
-          if (base.player === _this) return acc;
+          if (acc.player === _this6) return base;
+          if (base.player === _this6) return acc;
           return acc.unitCount < base.unitCount ? acc : base;
         });
-        this.bases.forEach(function (base) {
-          _this.game.swarm(base, weakestBase);
-        });
+        this.swarm(weakestBase);
       } else {
-        if (worstPlayer !== this) {// weakestBase = this.game.bases.reduce((acc, base) => {
-          //   if ( acc.player === this ) return base;
-          //   if ( base.player === this ) return acc;
-          //   return acc.player !== bestPlayer && acc.unitCount < base.unitCount ? acc : base;
-          // });
-          // strongestBase = this.bases.reduce((acc, base) => acc.unitCount > base.unitCount ? acc : base);
-          // this.game.swarm(strongestBase, weakestBase);
+        if (worstPlayer !== this) {// Do nothing
         } else if (this.bases.length > 1) {
           strongestBase = this.bases.reduce(function (acc, base) {
             return acc.unitCount > base.unitCount ? acc : base;
@@ -941,6 +1043,48 @@ var Player = /*#__PURE__*/function () {
           });
           this.game.swarm(strongestBase, weakestBase);
         }
+      }
+    }
+  }, {
+    key: "computeMoves",
+    value: function computeMoves() {
+      var _this7 = this;
+
+      this.thoughtProgress = 0.0; // Hunt for Neutral Bases
+
+      var neutralBases = this.game.bases.filter(function (base) {
+        return base.player.type === null;
+      });
+
+      if (neutralBases.length > 0) {
+        var target = neutralBases.reduce(function (acc, base) {
+          var accDist = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([acc.x, acc.y], [_this7.x, _this7.y]);
+          var baseDist = _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].distance([base.x, base.y], [_this7.x, _this7.y]);
+          return accDist < baseDist ? acc : base;
+        });
+        this.swarm(target);
+      }
+
+      switch (this.computerType) {
+        case 1:
+          this.aggresiveManuevers();
+          break;
+
+        case 2:
+          this.sneakyManuevers();
+          break;
+
+        case 3:
+          this.slowManuevers();
+          break;
+
+        case 4:
+          this.valueManuevers();
+          break;
+
+        default:
+          this.defaultManuevers();
+          break;
       }
     }
   }, {
