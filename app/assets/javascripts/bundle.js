@@ -218,7 +218,10 @@ function locationPosition(height, width, placement) {
 
 function newGame() {
   if (gameView) gameView.game.gameOver = true;
+  var audio = document.getElementsByTagName('audio')[0];
+  audio.play();
   var selectedSettings;
+  document.getElementById('game-toggles').classList.remove('hidden');
 
   switch (document.getElementById('game-setting').value) {
     case "small":
@@ -306,6 +309,12 @@ function newGame() {
   //   space: 50,
   // })
 
+  var muteButton = document.getElementById('mute-button');
+  muteButton.addEventListener('click', function (event) {
+    game.mute = !game.mute;
+    audio.mute = game.mute;
+    muteButton.innerText = game.mute ? "Unmute" : "Mute";
+  });
   gameView = new _lib_game_view_js__WEBPACK_IMPORTED_MODULE_0__["default"](game, context).start();
 }
 
@@ -484,6 +493,7 @@ var Game = /*#__PURE__*/function () {
     this.unitsUniqueId = -999999999;
     this.stars = [];
     this.drawGrid = false;
+    this.mute = false;
     this.playerStatsDiv;
     this.draw = this.draw.bind(this);
     this.step = this.step.bind(this);

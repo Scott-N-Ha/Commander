@@ -34,13 +34,16 @@
     </select>
     <button id="new-game">New Game</button>
     <button id="computer-game">Computers Only</button>
-    <button id="grid-toggle">Toggle Grid</button>
   </div>
   <div id="player-stats">
-
   </div>
   <div id="game-window">
     <canvas id="canvas">No Canvas Loaded</canvas>
+    <audio src="./app//assets/sounds/bg.mp3" class="hidden" loop></audio>
+  </div>
+  <div id="game-toggles" class="hidden">
+    <button id="grid-toggle">Toggle Grid</button>
+    <button id="mute-button">Mute</button>
   </div>
   <div id="instructions">
     You are the commander of a space fleet and your goal is to conquer every other nation out there. However, these nations have the same goal as you! Fight, survive, and conquer!

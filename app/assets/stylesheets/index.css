@@ -81,6 +81,20 @@ canvas {
   text-align: center;
 }
 
+#game-toggles {
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+
+#game-toggles.hidden {
+  display: none;
+}
+
+#game-toggles * {
+  margin: 5px;
+}
+
 #instructions {
   width: 60%;
   border: 1px solid black;
@@ -96,4 +110,8 @@ canvas {
   margin: 10px;
   border: none;
   font-size: 48px;
+}
+
+.hidden {
+  display: none;
 }

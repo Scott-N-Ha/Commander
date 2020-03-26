@@ -136,7 +136,12 @@ function locationPosition(height, width, placement) {
 function newGame() {
   if (gameView) gameView.game.gameOver = true;
 
+  const audio = document.getElementsByTagName('audio')[0];
+  audio.play();
+
   let selectedSettings;
+
+  document.getElementById('game-toggles').classList.remove('hidden');
 
   switch (document.getElementById('game-setting').value) {
     case "small":
@@ -232,6 +237,13 @@ function newGame() {
   //   space: 50,
   // })
 
+  const muteButton = document.getElementById('mute-button');
+  muteButton.addEventListener('click', event => {
+    game.mute = !game.mute;
+    audio.mute = game.mute;
+    muteButton.innerText = game.mute ? "Unmute" : "Mute";
+  });
+
   gameView = new GameView(game, context).start();
 }
 
@@ -248,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
     event.target.disabled = true;
     computerGameButton.disabled = true;
     newGame();
-  })
+  });
 
   computerGameButton.addEventListener('click', event => {
     event.target.textContent = "Computers only";
@@ -256,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
     newGameButton.disabled = true;
     computerOnly = true;
     newGame();
-  })
+  });
 
   const toggleGridButton = document.getElementById('grid-toggle');
   toggleGridButton.addEventListener('click', event => {
