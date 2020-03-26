@@ -248,13 +248,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const computerGameButton = document.getElementById('computer-game');
 
   newGameButton.addEventListener('click', event => {
-    event.target.textContent = "Restart Game";
+    event.target.textContent = "Button is Broke";
+    newGameButton.disabled = true;
     computerOnly = false;
     newGame();
   });
   
   computerGameButton.addEventListener('click', event => {
-    newGameButton.textContent = "Restart Game";
+    newGameButton.textContent = "Button is Broke";
+    newGameButton.disabled = true;
     computerOnly = true;
     newGame();
   });
