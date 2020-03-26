@@ -208,6 +208,7 @@ function newGame() {
     game.addPlayer({
       playerName: `Player ${index + 1}`,
       humanPlayer: index === 0,
+      thoughtGrowth: index === 0 ? 0 : .69,
       color: playerColors[index],
       origin: locationPosition(game.settings.height, game.settings.width, loc),
     });
