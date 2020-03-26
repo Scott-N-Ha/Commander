@@ -222,7 +222,6 @@ function newGame() {
   game = undefined;
   gameView = undefined;
   var selectedSettings;
-  document.getElementById('game-toggles').classList.remove('hidden');
 
   switch (document.getElementById('game-setting').value) {
     case "small":
@@ -250,7 +249,10 @@ function newGame() {
     }
   }
 
-  game = new _lib_game_js__WEBPACK_IMPORTED_MODULE_1__["default"](selectedSettings);
+  var selectedDifficulty = document.getElementById('game-difficulty').value;
+  game = new _lib_game_js__WEBPACK_IMPORTED_MODULE_1__["default"](Object.assign(selectedSettings, {
+    difficulty: selectedDifficulty
+  }));
   game.addStars(_lib_util_js__WEBPACK_IMPORTED_MODULE_2__["default"].getRandomArbitrary(69, 420));
   game.addNeutralBases(SPAWN_SPACE * 1.5, game.settings.neutralBaseCount);
   var canvas = document.getElementById('canvas');
@@ -293,23 +295,18 @@ function newGame() {
       game.prevClick = false;
     }
   });
-  var selectedDifficulty = document.getElementById('game-difficulty').value;
   startingLocationForPlayers.forEach(function (loc, index) {
     game.addPlayer({
       playerName: "Player ".concat(index + 1),
       humanPlayer: !computerOnly && index === 0,
       thoughtGrowth: !computerOnly && index === 0 ? 0 : gameDifficulty[selectedDifficulty],
       color: playerColors[index],
-      origin: locationPosition(game.settings.height, game.settings.width, loc)
+      origin: locationPosition(game.settings.height, game.settings.width, loc),
+      game: game
     });
-  }); // game.addPlayer({
-  //   playerName: "Player 2",
-  //   humanPlayer: false,
-  //   color: '#EB7261',
-  //   origin: [selectedSettings.width-100,selectedSettings.height-100],
-  //   space: 50,
-  // })
-
+  });
+  document.getElementById('game-toggles').classList.remove('hidden');
+  document.getElementById('canvas').scrollIntoView();
   gameView = new _lib_game_view_js__WEBPACK_IMPORTED_MODULE_0__["default"](game, context).start();
 }
 
@@ -321,14 +318,14 @@ document.addEventListener("DOMContentLoaded", function () {
   var newGameButton = document.getElementById('new-game');
   var computerGameButton = document.getElementById('computer-game');
   newGameButton.addEventListener('click', function (event) {
-    event.target.textContent = "Currently Broken Button"; // event.target.disabled = true;
-    // computerGameButton.disabled = true;
+    event.target.textContent = "Borken Button :(";
+    event.target.disabled = true; // computerGameButton.disabled = true;
 
     newGame();
   });
   computerGameButton.addEventListener('click', function (event) {
-    event.target.textContent = "Computers only"; // event.target.disabled = true;
-    // newGameButton.disabled = true;
+    newGameButton.disabled = true;
+    newGameButton.textContent = "Borken Button :("; // event.target.disabled = true;
 
     computerOnly = true;
     newGame();
@@ -375,6 +372,11 @@ var progressBarDims = {
   width: 20,
   height: 4
 };
+var gameDifficulty = {
+  easy: 1.0,
+  medium: 1.1,
+  hard: 1.2
+};
 
 var Base = /*#__PURE__*/function () {
   function Base() {
@@ -390,6 +392,8 @@ var Base = /*#__PURE__*/function () {
     this.growthRate = settings.growthRate;
     this.growthCount = settings.growthCount;
     this.selected = false;
+    this.humanGrowthRate = settings.growthRate;
+    this.cpuGrowthRate = settings.growthRate * gameDifficulty[settings.difficulty];
     this.player = settings.player;
     this.step = this.step.bind(this);
     this.draw = this.draw.bind(this);
@@ -399,11 +403,12 @@ var Base = /*#__PURE__*/function () {
     key: "step",
     value: function step() {
       if (this.unitCount > 0) {
-        this.progress = Number(Number(this.progress + this.growthRate).toFixed(2));
+        this.growthRate = this.player.humanPlayer ? this.humanGrowthRate : this.cpuGrowthRate;
+        this.progress += this.growthRate;
 
         if (this.progress >= 100.0) {
           this.unitCount += this.growthCount;
-          this.progress = 0;
+          this.progress = 0.0;
         }
       } else {
         this.progress = 0.0;
@@ -494,6 +499,7 @@ var Game = /*#__PURE__*/function () {
     _classCallCheck(this, Game);
 
     this.settings = settings;
+    this.difficulty = settings.difficulty;
     this.players = [];
     this.humanPlayer;
     this.gameOver = false;
@@ -551,7 +557,6 @@ var Game = /*#__PURE__*/function () {
       newDiv.appendChild(newAttack);
       document.getElementById('player-stats').appendChild(newDiv);
       player.playerDiv = newDiv;
-      player.game = this;
       this.players.push(player);
       if (player.humanPlayer) this.humanPlayer = player;
       this.addBase({
@@ -560,7 +565,8 @@ var Game = /*#__PURE__*/function () {
         position: settings.origin.first,
         growthRate: 0.69,
         width: 69,
-        player: player
+        player: player,
+        difficulty: this.difficulty
       });
       this.addBase({
         unitCount: 25,
@@ -568,7 +574,8 @@ var Game = /*#__PURE__*/function () {
         position: settings.origin.second,
         growthRate: 0.5,
         width: 50,
-        player: player
+        player: player,
+        difficulty: this.difficulty
       });
     }
   }, {
@@ -616,7 +623,8 @@ var Game = /*#__PURE__*/function () {
           player: {
             type: null,
             color: '#C0C0C0'
-          }
+          },
+          difficulty: _this.difficulty
         });
       });
     }
@@ -853,6 +861,11 @@ var computerAITypes = {
   3: "Defensive CPU",
   4: "Production CPU"
 };
+var gameDifficulty = {
+  easy: 0.0,
+  medium: -20.0,
+  hard: -50.00
+};
 
 var Player = /*#__PURE__*/function () {
   function Player(options) {
@@ -865,9 +878,9 @@ var Player = /*#__PURE__*/function () {
     this.bases = [];
     this.unitCount = 0;
     this.attackPower = 0;
-    this.game;
+    this.game = options.game;
     this.playerDiv;
-    this.thoughtProgress = 0.0;
+    this.thoughtProgress = gameDifficulty[this.game.difficulty];
     this.thoughtGrowth = options.thoughtGrowth + _util_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRandomArbitrary(0, 10) / 100;
     this.step = this.step.bind(this);
     this.draw = this.draw.bind(this);
@@ -1194,16 +1207,13 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
- // const options = {
-//   x: ,
-//   y: ,
-//   velocity: ,
-//   player: ,
-//   game: ,
-//   target: ,
-// }
 
 var NORMAL_FRAME_TIME_DELTA = 10000 / 6;
+var gameDifficulty = {
+  easy: 1.0,
+  medium: 1.420,
+  hard: 1.69
+};
 
 var Unit = /*#__PURE__*/function () {
   function Unit(options) {
@@ -1230,7 +1240,7 @@ var Unit = /*#__PURE__*/function () {
       // in this case the MovingObject should move farther in this frame
       // velocity of object is how far it should move in 1/60th of a second
       // const velocityScale = timeDelta / NORMAL_FRAME_TIME_DELTA;
-      var velocityScale = 2.0;
+      var velocityScale = 2.0 * gameDifficulty[this.game.difficulty];
       var offsetX = this.velocity[0] * velocityScale;
       var offsetY = this.velocity[1] * velocityScale;
       this.x = this.x + offsetX;
@@ -1249,8 +1259,7 @@ var Unit = /*#__PURE__*/function () {
           } else {
             this.target.unitCount = this.target.unitCount - 1;
           }
-        } // if (this.y > this.target.y && this.y < this.target.y + this.target.width && this.x > this.target.x && this.x < this.target.x + this.target.width) {
-
+        }
       }
     }
   }, {

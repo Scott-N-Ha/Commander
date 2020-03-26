@@ -43,7 +43,6 @@ const gameDifficulty = {
   hard: .88,
 }
 
-
 function locationPosition(height, width, placement) {
   let leftBound = 5,
     upperBound = 5,
@@ -141,8 +140,6 @@ function newGame() {
 
   let selectedSettings;
 
-  document.getElementById('game-toggles').classList.remove('hidden');
-
   switch (document.getElementById('game-setting').value) {
     case "small":
       selectedSettings = smallSettings;
@@ -166,7 +163,8 @@ function newGame() {
     }
   }
 
-  game = new Game(selectedSettings);
+  const selectedDifficulty = document.getElementById('game-difficulty').value;
+  game = new Game(Object.assign(selectedSettings, { difficulty: selectedDifficulty }));
   game.addStars(Util.getRandomArbitrary(69, 420));
   game.addNeutralBases(SPAWN_SPACE * 1.5, game.settings.neutralBaseCount);
 
@@ -217,8 +215,6 @@ function newGame() {
     }
   });
 
-  const selectedDifficulty = document.getElementById('game-difficulty').value;
-
   startingLocationForPlayers.forEach((loc, index) => {
     game.addPlayer({
       playerName: `Player ${index + 1}`,
@@ -226,16 +222,12 @@ function newGame() {
       thoughtGrowth: !computerOnly && index === 0 ? 0 : gameDifficulty[selectedDifficulty],
       color: playerColors[index],
       origin: locationPosition(game.settings.height, game.settings.width, loc),
+      game: game,
     });
   });
 
-  // game.addPlayer({
-  //   playerName: "Player 2",
-  //   humanPlayer: false,
-  //   color: '#EB7261',
-  //   origin: [selectedSettings.width-100,selectedSettings.height-100],
-  //   space: 50,
-  // })
+  document.getElementById('game-toggles').classList.remove('hidden');
+  document.getElementById('canvas').scrollIntoView();
 
   gameView = new GameView(game, context).start();
 }
@@ -249,16 +241,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const computerGameButton = document.getElementById('computer-game');
 
   newGameButton.addEventListener('click', event => {
-    event.target.textContent = "Currently Broken Button";
-    // event.target.disabled = true;
+    event.target.textContent = "Borken Button :(";
+    event.target.disabled = true;
     // computerGameButton.disabled = true;
     newGame();
   });
-
+  
   computerGameButton.addEventListener('click', event => {
-    event.target.textContent = "Computers only";
+    newGameButton.disabled = true;
+    newGameButton.textContent = "Borken Button :(";
     // event.target.disabled = true;
-    // newGameButton.disabled = true;
     computerOnly = true;
     newGame();
   });
