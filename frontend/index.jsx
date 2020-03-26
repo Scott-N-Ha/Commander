@@ -5,7 +5,8 @@ import Util from '../lib/util.js';
 let gameView;
 let game;
 let computerOnly = false;
-let bgMusic = true;
+let bgMusic = false;
+let audio;
 
 const SPAWN_SPACE = 69;
 
@@ -167,6 +168,11 @@ function newGame() {
   game = new Game(Object.assign(selectedSettings, { difficulty: selectedDifficulty }));
   game.addStars(Util.getRandomArbitrary(69, 420));
   game.addNeutralBases(SPAWN_SPACE * 1.5, game.settings.neutralBaseCount);
+    
+  if (audio) {
+    audio.play();
+    bgMusic = true;
+  }
 
   const canvas = document.getElementById('canvas');
   canvas.width = game.settings.width;
@@ -255,8 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     newGame();
   });
 
-  const audio = document.getElementsByTagName('audio')[0];
-  audio.play();
+  audio = document.getElementsByTagName('audio')[0];
 
   const muteButton = document.getElementById('mute-button');
   muteButton.addEventListener('click', event => {

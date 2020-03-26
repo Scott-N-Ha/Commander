@@ -104,7 +104,8 @@ __webpack_require__.r(__webpack_exports__);
 var gameView;
 var game;
 var computerOnly = false;
-var bgMusic = true;
+var bgMusic = false;
+var audio;
 var SPAWN_SPACE = 69;
 var smallSettings = {
   height: 500,
@@ -255,6 +256,12 @@ function newGame() {
   }));
   game.addStars(_lib_util_js__WEBPACK_IMPORTED_MODULE_2__["default"].getRandomArbitrary(69, 420));
   game.addNeutralBases(SPAWN_SPACE * 1.5, game.settings.neutralBaseCount);
+
+  if (audio) {
+    audio.play();
+    bgMusic = true;
+  }
+
   var canvas = document.getElementById('canvas');
   canvas.width = game.settings.width;
   canvas.height = game.settings.height;
@@ -330,8 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
     computerOnly = true;
     newGame();
   });
-  var audio = document.getElementsByTagName('audio')[0];
-  audio.play();
+  audio = document.getElementsByTagName('audio')[0];
   var muteButton = document.getElementById('mute-button');
   muteButton.addEventListener('click', function (event) {
     bgMusic = !bgMusic;
