@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import GameView from '../lib/game_view.js';
 import Game from '../lib/game.js';
 import Util from '../lib/util.js';
