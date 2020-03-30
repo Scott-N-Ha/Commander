@@ -329,14 +329,16 @@ document.addEventListener("DOMContentLoaded", function () {
   var newGameButton = document.getElementById('new-game');
   var computerGameButton = document.getElementById('computer-game');
   newGameButton.addEventListener('click', function (event) {
-    event.target.textContent = "Button is Broke";
+    // event.target.textContent = "Button is Broke";
     newGameButton.disabled = true;
+    newGameButton.hidden = true;
     computerOnly = false;
     newGame();
   });
   computerGameButton.addEventListener('click', function (event) {
-    newGameButton.textContent = "Button is Broke";
+    // newGameButton.textContent = "Button is Broke";
     newGameButton.disabled = true;
+    newGameButton.hidden = true;
     computerOnly = true;
     newGame();
   });
