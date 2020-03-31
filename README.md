@@ -9,7 +9,7 @@ The main objective of the game is to command your units to "conquer" the bases o
 ## Designing multiple AI
 One of the hardest challenges for this project was deisgning multiple versions of AI that would play differently so that the gameplay would not be stale.
 
-Here is an example of the `Sneaky CPU` that I built. Its main goal is to target the weakest base out of the board and "swarm" the base with its units.
+Here is an example of the `Sneaky CPU` that I built. Its main goal is to target the weakest base of the strongest player on the board and "swarm" the base with its units.
 
 ```javascript
 sneakyManuevers() {
