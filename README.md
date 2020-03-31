@@ -1,10 +1,15 @@
 # [Commander](https://scott-n-ha.github.io/Commander/)
 A Real-Time Strategy game by Scott Ha
 
+![GamePlay](app/assets/images/ss1.png)
+
+## Objective
+The main objective of the game is to command your units to "conquer" the bases on the board. There are other AI players that are also trying to do the same.
+
 ## Designing multiple AI
 One of the hardest challenges for this project was deisgning multiple versions of AI that would play differently so that the gameplay would not be stale.
 
-Here is an example of the `Sneaky CPU` that I built. It's main goal is to target the weakest base out of the board and "swarm" the base with its units.
+Here is an example of the `Sneaky CPU` that I built. Its main goal is to target the weakest base out of the board and "swarm" the base with its units.
 
 ```javascript
 sneakyManuevers() {
