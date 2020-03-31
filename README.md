@@ -34,3 +34,9 @@ By using Array.reduce, I was able to quickly sort through the entire game's boar
 * Run `npm install` in the root folder
 * Run `npm start` to start the webpack
 * Navigate to the `index.html` file location in a browser to run the game
+
+## Future Features
+There were several things that could not be added or addressed within the 1 week time limit.
+* Design a larger map that would be able to handle the amount of units on board lag free
+* Implement more players in a lag free scenario
+* Implement a stronger, smarter, more responsive AI
