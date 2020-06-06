@@ -62,7 +62,12 @@
   </div>
   <div id="game-window">
     <canvas id="canvas">No Canvas Loaded</canvas>
-    <audio src="./app//assets/sounds/bg.mp3" class="hidden" loop></audio>
+    <audio
+      id="bgm"
+      src="./app//assets/sounds/bg.mp3"
+      class="hidden"
+      loop
+    ></audio>
   </div>
   <div id="game-toggles" class="hidden">
     <button id="mute-button">Mute</button>
@@ -80,7 +85,7 @@
       <br>- Select your Map size, number of players, and AI Difficulty
       <br>- Press "New Game" to play as the <span class="green">Green</span>
       Commander
-      <br>- Press "AI Only Game" to watch the AI play
+      <br>- Press "AI Only Game" to watch the AI play against each other.
       <br>
       <br> As the <span class="green">Green</span> Commander:
       <br>- Click a <span class="green">Green</span> base to select it

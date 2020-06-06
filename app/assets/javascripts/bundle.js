@@ -343,6 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
     newGame();
   });
   audio = document.getElementsByTagName('audio')[0];
+  audio.volume = 0.25;
   var muteButton = document.getElementById('mute-button');
   muteButton.addEventListener('click', function (event) {
     bgMusic = !bgMusic;

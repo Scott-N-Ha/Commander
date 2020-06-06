@@ -265,6 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   audio = document.getElementsByTagName('audio')[0];
+  audio.volume = 0.25;
 
   const muteButton = document.getElementById('mute-button');
   muteButton.addEventListener('click', event => {
